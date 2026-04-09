@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+@theme {
+	/* Define your custom color palette */
+	--color-goddess-50: #fff0f5;
+	--color-goddess-100: #ffdeeb;
+	--color-goddess-200: #ffc2d1;
+	--color-goddess-300: #ff9eb5;
+	--color-goddess-400: #ff7597;
+	--color-goddess-500: #ff4d7a; /* Primary Brand Color */
+	--color-goddess-600: #e62e5d;
+	--color-goddess-700: #c01644;
+	--color-goddess-800: #9e123a;
+	--color-goddess-900: #821133;
+
+	/* Define custom fonts */
+	--font-serif: 'Playfair Display', serif;
+	--font-sans: 'Lato', sans-serif;
+}
+/* Base Styles */
+body {
+	font-family: 'Lato', sans-serif;
+	background-color: #ffffff;
+	color: #333;
+	scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Playfair Display', serif;
+}
+
+/* Custom Utilities not covered by standard Tailwind utilities */
+.text-shadow {
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-gradient {
+	background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 240, 245, 0.6));
+}
+
+/* Smooth fade in for aesthetics */
+.fade-in {
+	animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
