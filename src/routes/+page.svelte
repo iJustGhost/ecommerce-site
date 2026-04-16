@@ -1,4 +1,66 @@
-<main class="pt-20 flex-grow">
+<script>
+	import gcash from '$lib/assets/gcash.jpg'
+	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/Header.svelte';
+	import { supabase } from "$lib/supaBaseClient.js";
+
+	let fullName = $state('');
+	let phoneNumber = $state('');
+	let service = $state('Hair Styling');
+	let preferredDate = $state('');
+	let specialRequests = $state('');
+	let gcashRef = $state('');
+
+	async function submitBooking() {
+		// Hlert when the form is empty or other field is not filled out
+		if (!fullName || !phoneNumber || !service || !preferredDate || !gcashRef) {
+			alert('Please fill out all required fields before submitting your booking.');
+			return;
+		}
+		// Validate gcashRef is 13 digits
+		if (!/^\d{13}$/.test(gcashRef)) {
+			alert('Please enter a valid 13-digit GCash reference number.');
+			return;
+		}
+		// Validate phone number (basic validation for 10-15 digits, allowing spaces, dashes, and parentheses)
+		if (!/^[\d\s\-()]{10,15}$/.test(phoneNumber)) {
+			alert('Please enter a valid phone number (10-15 digits, can include spaces, dashes, and parentheses).');
+			return;
+		}
+		// Here you would normally send the data to your backend or an API
+		console.log('Booking Details:', {
+			fullName,
+			phoneNumber,
+			service,
+			preferredDate,
+			specialRequests,
+			gcashRef
+		});
+		alert('Thank you for booking with us! We will contact you shortly.');
+
+		const { data, error } = await supabase.from('books').insert([
+			{
+				fullName: fullName,
+				phoneNumber: phoneNumber,
+				service: service,
+				preferredDate: preferredDate,
+				specialRequests: specialRequests,
+				gcashRef: gcashRef
+			}
+		]);
+
+		if (error) {
+			console.error('Error saving booking:', error);
+			alert('There was an error saving your booking. Please try again later.');
+		} else {
+			console.log('Booking saved successfully:', data);
+		}
+	}
+</script>
+
+<Header />
+
+<main class="pt-20 grow">
 	<!-- SECTION: Hero -->
 	<section id="home" class="relative flex min-h-[90vh] items-center">
 		<!-- Background Image -->
@@ -204,7 +266,7 @@
 
 	<!-- SECTION: Booking -->
 	<section id="book" class="py-24 bg-goddess-600 text-white">
-		<div class="px-6 max-w-4xl container mx-auto">
+		<div class="px-6 max-w-8xl container mx-auto">
 			<div class="mb-12 text-center">
 				<h2 class="text-4xl font-serif font-bold mb-4">Book Your Appointment</h2>
 				<p class="text-goddess-100 text-lg">
@@ -212,7 +274,7 @@
 				</p>
 			</div>
 
-			<div class="bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
+			<div class="bg-white rounded-3xl p-8 md:p-12 shadow-2xl flex items-center justify-around">
 				<form class="md:grid-cols-2 gap-6 grid grid-cols-1">
 					<!-- Name -->
 					<div class="md:col-span-1 col-span-2">
@@ -223,6 +285,7 @@
 							type="text"
 							placeholder="Jane Doe"
 							class="px-4 py-3 rounded-lg bg-gray-50 border-gray-200 focus:border-goddess-500 focus:bg-white text-gray-800 w-full border transition focus:outline-none"
+							bind:value={fullName}
 						/>
 					</div>
 					<!-- Phone -->
@@ -234,6 +297,7 @@
 							type="tel"
 							placeholder="(555) 123-4567"
 							class="px-4 py-3 rounded-lg bg-gray-50 border-gray-200 focus:border-goddess-500 focus:bg-white text-gray-800 w-full border transition focus:outline-none"
+							bind:value={phoneNumber}
 						/>
 					</div>
 					<!-- Service -->
@@ -243,6 +307,7 @@
 						>
 						<select
 							class="px-4 py-3 rounded-lg bg-gray-50 border-gray-200 focus:border-goddess-500 focus:bg-white text-gray-800 w-full border transition focus:outline-none"
+							bind:value={service}
 						>
 							<option>Hair Styling</option>
 							<option>Manicure/Pedicure</option>
@@ -258,6 +323,7 @@
 						<input
 							type="date"
 							class="px-4 py-3 rounded-lg bg-gray-50 border-gray-200 focus:border-goddess-500 focus:bg-white text-gray-800 w-full border transition focus:outline-none"
+							bind:value={preferredDate}
 						/>
 					</div>
 					<!-- Notes -->
@@ -269,19 +335,35 @@
 							rows="4"
 							placeholder="Any specific allergies or stylist preferences?"
 							class="px-4 py-3 rounded-lg bg-gray-50 border-gray-200 focus:border-goddess-500 focus:bg-white text-gray-800 w-full border transition focus:outline-none"
+							bind:value={specialRequests}
 						></textarea>
+					</div>
+					<div class="col-span-2">
+						<label class="text-gray-700 font-bold mb-2 text-sm tracking-wide block uppercase"
+							>GCash Reference Number</label
+						>
+						<input
+							type="text"
+							placeholder="13 Digit GCash Ref No."
+							class="px-4 py-3 rounded-lg bg-gray-50 border-gray-200 focus:border-goddess-500 focus:bg-white text-gray-800 w-full border transition focus:outline-none"
+							bind:value={gcashRef}
+						/>
 					</div>
 					<!-- Submit -->
 					<div class="col-span-2">
 						<button
 							type="button"
 							class="bg-goddess-500 text-white font-bold py-4 rounded-lg hover:bg-goddess-600 shadow-lg hover:-translate-y-1 w-full transform transition duration-300"
+							onclick={submitBooking}
 						>
 							Confirm Booking
 						</button>
 					</div>
 				</form>
+				<img src={gcash} alt="GCash QR Code" class="w-1/3"/>
 			</div>
 		</div>
 	</section>
 </main>
+
+<Footer />

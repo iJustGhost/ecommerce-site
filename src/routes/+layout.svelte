@@ -16,14 +16,7 @@
 </svelte:head>
 
 <div class="flex min-h-screen flex-col">
-	<!-- 1. Call the Header here -->
-	<Header />
-
-	<!-- 2. The Slot renders the content from +page.svelte -->
-	<main class="pt-20 flex-grow">
+	<main class="flex-grow">
 		{@render children()}
 	</main>
-
-	<!-- 3. Call the Footer here -->
-	<Footer />
 </div>
