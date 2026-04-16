@@ -353,7 +353,7 @@
 					<div class="col-span-2">
 						<button
 							type="button"
-							class="bg-goddess-500 text-white font-bold py-4 rounded-lg hover:bg-goddess-600 shadow-lg hover:-translate-y-1 w-full transform transition duration-300"
+							class="cursor-pointer bg-goddess-500 text-white font-bold py-4 rounded-lg hover:bg-goddess-600 shadow-lg hover:-translate-y-1 w-full transform transition duration-300"
 							onclick={submitBooking}
 						>
 							Confirm Booking

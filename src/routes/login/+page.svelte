@@ -2,11 +2,21 @@
     import { goto } from '$app/navigation';
     import { supabase } from '$lib/supaBaseClient';
     import { base } from '$app/paths';
+    import { onMount } from 'svelte';
 
     let email = $state('');
     let password = $state('');
     let error = $state('');
     let loading = $state(false);
+
+    onMount(async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+            goto(base + '/admin');
+            return; 
+        }
+    });
 
     async function handleLogin() {
         loading = true;
@@ -84,7 +94,7 @@
                     <button
                         type="submit"
                         disabled={loading}
-                        class="w-full bg-goddess-600 hover:bg-goddess-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200 flex justify-center items-center"
+                        class="cursor-pointer w-full bg-goddess-600 hover:bg-goddess-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200 flex justify-center items-center"
                     >
                         {#if loading}
                             <!-- Loading Spinner -->
